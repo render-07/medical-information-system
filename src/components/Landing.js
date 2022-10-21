@@ -73,10 +73,6 @@ const Landing = () => {
     showConfirmPassword: false,
   });
 
-  const toggleModal = () => {
-    setOpen(!open);
-  };
-
   const handleClickShowPassword = () => {
     setValues({
       ...values,
@@ -224,7 +220,10 @@ const Landing = () => {
                 </StyledButton>
               </FormControl>
             </Container>
-            <StyledRegisterButton variant="contained" onClick={toggleModal}>
+            <StyledRegisterButton
+              variant="contained"
+              onClick={() => setOpen(!open)}
+            >
               Register
             </StyledRegisterButton>
           </Grid>
@@ -233,7 +232,7 @@ const Landing = () => {
 
       <Modal
         open={open}
-        onClose={toggleModal}
+        onClose={() => setOpen(!open)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

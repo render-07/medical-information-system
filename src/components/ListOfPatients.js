@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
   CardActions,
   CardContent,
+  Container,
+  Modal,
+  Stack,
   styled,
   Typography,
 } from "@mui/material";
 import { MdViewList } from "react-icons/md";
+import { AiFillPrinter } from "react-icons/ai";
 
 const StyledMainCard = styled(Card)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
@@ -15,11 +19,8 @@ const StyledMainCard = styled(Card)(({ theme }) => ({
   borderRadius: "20px",
   boxShadow:
     "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
-  marginTop: 35,
-}));
-
-const StyledColoredBox = styled(Box)(({ theme }) => ({
-  backgroundColor: "#ffd538",
+  marginTop: 15,
+  marginBottom: 20,
 }));
 
 const StyledHeader = styled(Typography)(({ theme }) => ({
@@ -30,14 +31,12 @@ const StyledHeader = styled(Typography)(({ theme }) => ({
 }));
 
 const ListOfPatients = ({ patientId, name, description, date }) => {
+  const [openPatientInfo, setOpenPatientInfo] = useState(false);
+
   return (
     <StyledMainCard>
       <CardContent sx={{ display: "flex", flexDirection: "row" }}>
-        <Box
-          sx={{
-            flex: 0.9,
-          }}
-        >
+        <Box>
           <StyledHeader variant="h6" gutterBottom>
             <MdViewList
               style={{
@@ -46,7 +45,7 @@ const ListOfPatients = ({ patientId, name, description, date }) => {
                 color: "#BBBBBB",
                 marginTop: -2,
               }}
-              onClick={() => alert("click")}
+              onClick={() => setOpenPatientInfo(!openPatientInfo)}
               cursor="pointer"
             />
             Patient {patientId}
@@ -57,7 +56,56 @@ const ListOfPatients = ({ patientId, name, description, date }) => {
           <Typography variant="caption">Date Admitted: {date}</Typography>
         </Box>
       </CardContent>
-      <CardActions></CardActions>
+
+      {openPatientInfo && (
+        <Modal
+          open={openPatientInfo}
+          onClose={() => setOpenPatientInfo(!openPatientInfo)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Container
+            sx={{
+              borderRadius: "16px",
+              boxShadow: 3,
+              // width: { xs: 320, md: 420 },
+              // height: { xs: 300, md: 300 },
+              paddingTop: 5,
+              paddingBotom: 5,
+              backgroundColor: "#fff",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: { xs: "15rem", lg: "20rem" },
+              p: 4,
+            }}
+          >
+            <Stack direction="row" spacing={2} justifyContent="space-between">
+              <StyledHeader>Patient {patientId}</StyledHeader>
+
+              <AiFillPrinter
+                style={{
+                  fontSize: 25,
+                  marginRight: "10px",
+                  color: "#707070",
+                  marginTop: -2,
+                }}
+                onClick={() => setOpenPatientInfo(!openPatientInfo)}
+                cursor="pointer"
+              />
+            </Stack>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              adjective
+            </Typography>
+            <Typography sx={{ mb: 1.5 }}>{description}</Typography>
+          </Container>
+        </Modal>
+      )}
     </StyledMainCard>
   );
 };

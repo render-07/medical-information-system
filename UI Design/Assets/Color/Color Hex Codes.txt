@@ -1,0 +1,8 @@
+Main button/Title texts: #5998F8
+Secondary button: #6FDDDF
+Secondary/Body Text/Covid-19 No. of Deaths: #707070
+Covid-19 No. of Cases: #BBBBBB
+Covid-19 No. of Recovered/Country: #82BBF7
+Covid New Cases: #7AD7F6
+Covid New Deaths: #EF4B4B
+Covid New Recovered: #86DEEC
