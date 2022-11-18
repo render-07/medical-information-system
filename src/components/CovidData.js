@@ -1,16 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Container,
-  Modal,
-  Paper,
-  Stack,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, styled, Typography } from "@mui/material";
 
 const StyledMainCard = styled(Card)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,

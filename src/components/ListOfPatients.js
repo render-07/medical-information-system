@@ -28,9 +28,20 @@ const StyledHeader = styled(Typography)(({ theme }) => ({
   alignItems: "center",
   color: theme.palette.primary.main,
   fontWeight: 600,
+  fontSize: 17,
 }));
 
-const ListOfPatients = ({ patientId, name, description, date }) => {
+const ListOfPatients = ({
+  patientId,
+  firstName,
+  middleName,
+  lastName,
+  mobileNumber,
+  age,
+  gender,
+  description,
+  date,
+}) => {
   const [openPatientInfo, setOpenPatientInfo] = useState(false);
 
   return (
@@ -99,10 +110,16 @@ const ListOfPatients = ({ patientId, name, description, date }) => {
                 cursor="pointer"
               />
             </Stack>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
+            <Typography sx={{ mb: 1.5 }}>
+              <br />
+              {firstName} {middleName} {lastName}
             </Typography>
-            <Typography sx={{ mb: 1.5 }}>{description}</Typography>
+            <Typography sx={{ mb: 1.5 }}>
+              Age: {age}, Gender: {gender}, Number: {mobileNumber}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }}>
+              Health history: {description}
+            </Typography>
           </Container>
         </Modal>
       )}

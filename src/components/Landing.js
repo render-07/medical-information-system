@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { createUser, loginUser } from "../api/user";
 
 const StyledMainBox = styled(Box)(({ theme }) => ({}));
 
@@ -67,6 +68,10 @@ const Landing = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
+    mobileNumber: "",
+    email: "",
     password: "",
     confirmPassword: "",
     showPassword: false,
@@ -96,7 +101,51 @@ const Landing = () => {
   };
 
   const handleChange = (prop) => (event) => {
+    event.preventDefault();
     setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const register = () => (event) => {
+    event.preventDefault();
+    const callCreateUsers = async () => {
+      try {
+        if (values.password !== values.confirmPassword) {
+          alert("Password does not match.");
+          return;
+        }
+        const { data } = await createUser(values);
+        if (data.success === true) {
+          alert(data.msg);
+          window.location.reload();
+        } else {
+          alert(data.msg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    callCreateUsers();
+  };
+
+  const login = () => (event) => {
+    event.preventDefault();
+    const callLoginUser = async () => {
+      try {
+        const { data } = await loginUser(values);
+        console.log(data);
+        if (data.success === true) {
+          // setLocalToken(data.withToken);
+          // setLocalUser(data.username);
+          alert(data.msg);
+          navigate("/home");
+        } else {
+          alert(data.msg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    callLoginUser();
   };
 
   return (
@@ -126,6 +175,7 @@ const Landing = () => {
       >
         COVID PATIENTS' WEB INFO
       </StyledHeader>
+
       <Box
         sx={{
           flexGrow: 1,
@@ -189,36 +239,91 @@ const Landing = () => {
                 backgroundColor: "#fff",
               }}
             >
-              <FormControl
-                style={{
-                  alignItems: "center",
-                  justifyItems: "center",
-                }}
-              >
-                <TextField
-                  id="demo-helper-text-misaligned"
-                  label="Email address"
-                  sx={{
-                    width: { xs: 200, md: 350 },
-                    fontStyle: "italic",
+              <form onSubmit={login()}>
+                <FormControl
+                  style={{
+                    alignItems: "center",
+                    justifyItems: "center",
                   }}
-                />
-                <br />
-                <TextField
-                  id="demo-helper-text-misaligned"
-                  label="Password"
-                  sx={{
-                    width: { xs: 200, md: 350 },
-                    fontStyle: "italic",
-                  }}
-                />
-                <StyledButton
-                  variant="contained"
-                  onClick={() => navigate("/home")}
                 >
-                  Log in
-                </StyledButton>
-              </FormControl>
+                  <TextField
+                    id="demo-helper-text-misaligned"
+                    label="Email address"
+                    sx={{
+                      width: { xs: 200, md: 350 },
+                      fontStyle: "italic",
+                    }}
+                    value={values.email}
+                    onChange={handleChange("email")}
+                    required
+                  />
+                  <br />
+                  <TextField
+                    id="demo-helper-text-misaligned"
+                    label="Password"
+                    sx={{
+                      width: { xs: 200, md: 350 },
+                      fontStyle: "italic",
+                    }}
+                    type={values.showPassword ? "text" : "password"}
+                    value={values.password}
+                    onChange={handleChange("password")}
+                    required
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {values.showPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+
+                  {/* <TextField
+                    id="demo-helper-text-misaligned"
+                    label="Confirm password"
+                    type={values.showConfirmPassword ? "text" : "password"}
+                    value={values.confirmPassword}
+                    onChange={handleChange("confirmPassword")}
+                    required
+                    sx={{
+                      width: { xs: 200, md: 350 },
+                      fontStyle: "italic",
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowConfirmPassword}
+                            onMouseDown={handleMouseDownConfirmPassword}
+                            edge="end"
+                          >
+                            {values.showConfirmPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  /> */}
+                  <StyledButton variant="contained" type="submit">
+                    Log in
+                  </StyledButton>
+                </FormControl>
+              </form>
             </Container>
             <StyledRegisterButton
               variant="contained"
@@ -257,105 +362,127 @@ const Landing = () => {
             p: 4,
           }}
         >
-          <FormControl
-            style={{
-              alignItems: "center",
-              justifyItems: "center",
-            }}
-          >
-            <TextField
-              id="demo-helper-text-misaligned"
-              label="First name"
-              sx={{
-                width: { xs: 200, md: 350 },
-                fontStyle: "italic",
+          <form onSubmit={register()}>
+            <FormControl
+              style={{
+                alignItems: "center",
+                justifyItems: "center",
               }}
-            />
-            <br />
-            <TextField
-              id="demo-helper-text-misaligned"
-              label="Last name"
-              sx={{
-                width: { xs: 200, md: 350 },
-                fontStyle: "italic",
-              }}
-            />
-            <br />
-            <TextField
-              id="demo-helper-text-misaligned"
-              label="Mobile number"
-              sx={{
-                width: { xs: 200, md: 350 },
-                fontStyle: "italic",
-              }}
-            />
-            <br />
-            <TextField
-              id="demo-helper-text-misaligned"
-              label="Email address"
-              sx={{
-                width: { xs: 200, md: 350 },
-                fontStyle: "italic",
-              }}
-            />
-            <br />
-            <TextField
-              id="demo-helper-text-misaligned"
-              label="Password"
-              type={values.showPassword ? "text" : "password"}
-              value={values.password}
-              onChange={handleChange("password")}
-              sx={{
-                width: { xs: 200, md: 350 },
-                fontStyle: "italic",
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <br />
-            <TextField
-              id="demo-helper-text-misaligned"
-              label="Confirm password"
-              type={values.showConfirmPassword ? "text" : "password"}
-              value={values.confirmPassword}
-              onChange={handleChange("confirmPassword")}
-              sx={{
-                width: { xs: 200, md: 350 },
-                fontStyle: "italic",
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowConfirmPassword}
-                      onMouseDown={handleMouseDownConfirmPassword}
-                      edge="end"
-                    >
-                      {values.showConfirmPassword ? (
-                        <VisibilityOff />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <StyledButton variant="contained">Register</StyledButton>
-          </FormControl>
+            >
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="First name"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("firstName")}
+                value={values.firstName}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Last name"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("lastName")}
+                value={values.lastName}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Mobile number"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("mobileNumber")}
+                value={values.mobileNumber}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Email address"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("email")}
+                value={values.email}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                required
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {values.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Confirm password"
+                type={values.showConfirmPassword ? "text" : "password"}
+                value={values.confirmPassword}
+                onChange={handleChange("confirmPassword")}
+                required
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownConfirmPassword}
+                        edge="end"
+                      >
+                        {values.showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <StyledButton variant="contained" type="submit">
+                Register
+              </StyledButton>
+            </FormControl>
+          </form>
         </Container>
       </Modal>
     </StyledMainBox>

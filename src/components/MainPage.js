@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -35,6 +35,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListOfPatients from "./ListOfPatients";
 import { useLocation } from "react-router-dom";
 import CovidData from "./CovidData";
+import { FcPlus } from "react-icons/fc";
+import { getAllPatient } from "../api/patient";
+import { createPatient } from "../api/patient";
 
 const data = [
   {
@@ -150,9 +153,46 @@ const MainPage = (props) => {
   const [logout, setLogout] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openTable, setOpenTable] = useState(false);
+  const [addPatient, setAddPatient] = useState(false);
+  const [allPatients, setAllPatients] = useState([]);
+
+  const readAllPatients = async () => {
+    // const res = await getAllPatient();
+    const { data } = await getAllPatient();
+    return data;
+  };
+
+  const storeAllPatients = async () => {
+    const dataFromServer = await readAllPatients();
+    setAllPatients(dataFromServer.patient);
+  };
+
+  useEffect(() => {
+    storeAllPatients();
+  }, []);
+
+  console.log(allPatients);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const createNewPatient = () => (event) => {
+    event.preventDefault();
+    const callCreatePatient = async () => {
+      try {
+        const { data } = await createPatient(values);
+        if (data.success === true) {
+          alert(data.msg);
+          window.location.reload();
+        } else {
+          alert(data.msg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    callCreatePatient();
   };
 
   const drawer = (
@@ -178,11 +218,12 @@ const MainPage = (props) => {
       navigate("/home");
     } else if (item === "COVID19-CASES") {
       navigate("/cases");
-    } else if (item === "PROFILE") {
-      navigate("/profile");
     } else if (item === "LOGOUT") {
       setLogout(!logout);
     }
+    // else if (item === "PROFILE") {
+    //   navigate("/profile");
+    // }
   };
 
   const container =
@@ -276,6 +317,22 @@ const MainPage = (props) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const [values, setValues] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    mobileNumber: "",
+    email: "",
+    age: "",
+    gender: "",
+    healthHistory: "",
+  });
+
+  const handleChange = (prop) => (event) => {
+    event.preventDefault();
+    setValues({ ...values, [prop]: event.target.value });
   };
 
   return (
@@ -391,18 +448,182 @@ const MainPage = (props) => {
           </FormControl>
           <Box sx={{ flexGrow: 1, margin: { xs: "0 40px", lg: "0 90px" } }}>
             <Grid container spacing={{ xs: 2, md: 3 }}>
-              {data.map((value, index) => (
+              {allPatients.map((value, index) => (
                 <Grid item key={index} xs={12} sm={4} md={3}>
                   <ListOfPatients
-                    patientId={value.patientId}
-                    name={value.Name}
-                    description={value.Description}
-                    date={value.Date}
+                    patientId={value._id}
+                    firstName={value.firstName}
+                    middleName={value.middleName}
+                    lastName={value.lastName}
+                    mobileNumber={value.mobileNumber}
+                    age={value.age}
+                    gender={value.gender}
+                    description={value.healthHistory}
+                    date={value.registerDate}
                   />
                 </Grid>
               ))}
             </Grid>
           </Box>
+
+          <Container
+            sx={{
+              fontSize: { xs: 70, lg: 80 },
+              position: "fixed",
+              bottom: 0,
+              right: 0,
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <FcPlus
+              style={{
+                color: "#111a91",
+              }}
+              cursor="pointer"
+              onClick={() => setAddPatient(!addPatient)}
+            />
+          </Container>
+
+          {addPatient && (
+            <Modal
+              open={addPatient}
+              onClose={() => setAddPatient(!addPatient)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Container
+                sx={{
+                  borderRadius: "16px",
+                  boxShadow: 3,
+                  // width: { xs: 320, md: 420 },
+                  // height: { xs: 300, md: 300 },
+                  paddingTop: 5,
+                  paddingBotom: 5,
+                  backgroundColor: "#fff",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: { xs: "15rem", lg: "25rem" },
+                  p: 4,
+                }}
+              >
+                <form onSubmit={createNewPatient()}>
+                  <FormControl
+                    style={{
+                      alignItems: "center",
+                      justifyItems: "center",
+                    }}
+                  >
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="First name"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("firstName")}
+                      value={values.firstName}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="Middle name"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("middleName")}
+                      value={values.middleName}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="Last name"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("lastName")}
+                      value={values.lastName}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="Mobile number"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("mobileNumber")}
+                      value={values.mobileNumber}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="Email number"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("email")}
+                      value={values.email}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      type="number"
+                      label="Age"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("age")}
+                      value={values.age}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="Gender"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("gender")}
+                      value={values.gender}
+                      required
+                    />
+                    <br />
+                    <TextField
+                      id="demo-helper-text-misaligned"
+                      label="Health history"
+                      sx={{
+                        width: { xs: 200, md: 350 },
+                        fontStyle: "italic",
+                      }}
+                      onChange={handleChange("healthHistory")}
+                      value={values.healthHistory}
+                      required
+                    />
+                    <StyledButton variant="contained" type="submit">
+                      Register
+                    </StyledButton>
+                  </FormControl>
+                </form>
+              </Container>
+            </Modal>
+          )}
         </StyledMainBox>
       )}
 
