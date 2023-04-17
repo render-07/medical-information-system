@@ -57,9 +57,10 @@ mongoose
 // Use routes
 // Anything the goes to api/items, should refer to items variable
 // app.use("/api/users", require("./api/users"));
-app.use("/api/patient", require("./api/patient"));
 app.use("/api/user/login", require("./api/login"));
-app.use("/api/user/register", require("./api/register"));
+app.use("/api/user/patient", require("./api/patient"));
+app.use("/api/user/physician", require("./api/physician"));
+app.use("/api/health-history", require("./api/healthHistory"));
 
 // Declare PORT number (process.env.port is for HEROKU)
 const port = process.env.port || 5000;

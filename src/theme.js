@@ -32,5 +32,8 @@ export const theme = createTheme({
     teal: {
       main: "#86DEEC",
     },
+    darkBlue: {
+      main: "#5998f8",
+    },
   },
 });

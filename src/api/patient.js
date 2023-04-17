@@ -1,9 +1,13 @@
 import axios from "axios";
 
-export const createPatient = (params) => {
-  return axios.post("http://localhost:5000/api/patient/", params);
+export const loginPatient = async (params) => {
+  return axios.post("http://localhost:5000/api/user/login/patient", params);
 };
 
-export const getAllPatient = () => {
-  return axios.get("http://localhost:5000/api/patient/");
+export const createPatient = async (params) => {
+  return axios.post("http://localhost:5000/api/user/patient/", params);
+};
+
+export const readAllPatient = async () => {
+  return axios.get("http://localhost:5000/api/user/patient/");
 };

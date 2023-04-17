@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Card, CardContent, styled, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const StyledMainCard = styled(Card)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
@@ -18,6 +19,8 @@ const StyledHeader = styled(Typography)(({ theme }) => ({
 }));
 
 const CovidData = ({ header, description }) => {
+  const location = useLocation();
+
   return (
     <StyledMainCard
       sx={{ width: { xs: "15rem", sm: "13rem", md: "15rem", lg: "20rem" } }}

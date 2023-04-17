@@ -12,10 +12,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { createUser, loginUser } from "../api/user";
+import { loginPhysician, createPhysician } from "../api/physician";
+import { loginPatient, createPatient } from "../api/patient";
 
 const StyledMainBox = styled(Box)(({ theme }) => ({}));
 
@@ -66,17 +67,38 @@ const StyledRegisterButton = styled(Button)(({ theme }) => ({
 
 const Landing = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const [addPhysician, setAddPhysician] = useState(false);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
     mobileNumber: "",
     email: "",
+    workAddress: "",
+    licenses: "",
+    certificates: "",
+    image: "",
     password: "",
     confirmPassword: "",
     showPassword: false,
     showConfirmPassword: false,
   });
+  const [values1, setValues1] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    mobileNumber: "",
+    email: "",
+    age: "",
+    gender: "",
+    healthHistory: "",
+    password: "",
+    confirmPassword: "",
+    showPassword: false,
+    showConfirmPassword: false,
+  });
+  const [addPatient, setAddPatient] = useState(false);
+
+  const location = useLocation();
 
   const handleClickShowPassword = () => {
     setValues({
@@ -85,7 +107,18 @@ const Landing = () => {
     });
   };
 
+  const handleClickShowPassword1 = () => {
+    setValues1({
+      ...values1,
+      showPassword: !values1.showPassword,
+    });
+  };
+
   const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseDownPassword1 = (event) => {
     event.preventDefault();
   };
 
@@ -96,7 +129,18 @@ const Landing = () => {
     });
   };
 
+  const handleClickShowConfirmPassword1 = () => {
+    setValues1({
+      ...values1,
+      showConfirmPassword: !values1.showConfirmPassword,
+    });
+  };
+
   const handleMouseDownConfirmPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseDownConfirmPassword1 = (event) => {
     event.preventDefault();
   };
 
@@ -105,15 +149,20 @@ const Landing = () => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const register = () => (event) => {
+  const handleChange1 = (prop) => (event) => {
     event.preventDefault();
-    const callCreateUsers = async () => {
+    setValues1({ ...values1, [prop]: event.target.value });
+  };
+
+  const createNewPhysician = () => (event) => {
+    event.preventDefault();
+    const callCreatePhysician = async () => {
       try {
         if (values.password !== values.confirmPassword) {
           alert("Password does not match.");
           return;
         }
-        const { data } = await createUser(values);
+        const { data } = await createPhysician(values);
         if (data.success === true) {
           alert(data.msg);
           window.location.reload();
@@ -124,20 +173,81 @@ const Landing = () => {
         console.error(err);
       }
     };
-    callCreateUsers();
+    callCreatePhysician();
   };
 
   const login = () => (event) => {
     event.preventDefault();
     const callLoginUser = async () => {
+      if (location.state.user === "Physician") {
+        try {
+          const { data } = await loginPhysician(values);
+          console.log(data);
+          if (data.success === true) {
+            // setLocalToken(data.withToken);
+            // setLocalUser(data.username);
+            alert(data.msg);
+            navigate("/physician", {
+              state: {
+                user: location.state.user,
+                email: data.data.email,
+                physiciansFullname: data.data.fullName,
+                mobileNumber: data.data.mobileNumber,
+                email: data.data.email,
+                workAddress: data.data.workAddress,
+                licenses: data.data.licenses,
+                certificates: data.data.certificates,
+                image: data.data.image,
+              },
+            });
+          } else {
+            alert(data.msg);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        try {
+          const { data } = await loginPatient(values);
+          console.log(data);
+          if (data.success === true) {
+            // setLocalToken(data.withToken);
+            // setLocalUser(data.username);
+            alert(data.msg);
+            navigate("/patient", {
+              state: {
+                user: location.state.user,
+                userId: data.data._id,
+                patientsFullname: data.data.fullName,
+                mobileNumber: data.data.mobileNumber,
+                email: data.data.email,
+                age: data.data.age,
+                gender: data.data.gender,
+              },
+            });
+          } else {
+            alert(data.msg);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+    callLoginUser();
+  };
+
+  const createNewPatient = () => (event) => {
+    event.preventDefault();
+    const callCreatePatient = async () => {
       try {
-        const { data } = await loginUser(values);
-        console.log(data);
+        if (values1.password !== values1.confirmPassword) {
+          alert("Password does not match.");
+          return;
+        }
+        const { data } = await createPatient(values1);
         if (data.success === true) {
-          // setLocalToken(data.withToken);
-          // setLocalUser(data.username);
           alert(data.msg);
-          navigate("/home");
+          window.location.reload();
         } else {
           alert(data.msg);
         }
@@ -145,7 +255,7 @@ const Landing = () => {
         console.error(err);
       }
     };
-    callLoginUser();
+    callCreatePatient();
   };
 
   return (
@@ -325,19 +435,33 @@ const Landing = () => {
                 </FormControl>
               </form>
             </Container>
-            <StyledRegisterButton
-              variant="contained"
-              onClick={() => setOpen(!open)}
-            >
-              Register
-            </StyledRegisterButton>
+            <>
+              {location.state.user === "Physician" ? (
+                <StyledRegisterButton
+                  variant="contained"
+                  onClick={() => {
+                    setAddPhysician(!addPhysician);
+                  }}
+                >
+                  Register
+                </StyledRegisterButton>
+              ) : (
+                <StyledRegisterButton
+                  variant="contained"
+                  onClick={() => {
+                    setAddPatient(!addPatient);
+                  }}
+                >
+                  Register
+                </StyledRegisterButton>
+              )}
+            </>
           </Grid>
         </Grid>
       </Box>
-
       <Modal
-        open={open}
-        onClose={() => setOpen(!open)}
+        open={addPhysician}
+        onClose={() => setAddPhysician(!addPhysician)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -362,7 +486,7 @@ const Landing = () => {
             p: 4,
           }}
         >
-          <form onSubmit={register()}>
+          <form onSubmit={createNewPhysician()}>
             <FormControl
               style={{
                 alignItems: "center",
@@ -419,6 +543,51 @@ const Landing = () => {
               <br />
               <TextField
                 id="demo-helper-text-misaligned"
+                label="Work Address"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("workAddress")}
+                value={values.workAddress}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Licenses"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("licenses")}
+                value={values.licenses}
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Certificates"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("certificates")}
+                value={values.certificates}
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Image"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange("image")}
+                value={values.image}
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
                 label="Password"
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
@@ -469,6 +638,193 @@ const Landing = () => {
                         edge="end"
                       >
                         {values.showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <StyledButton variant="contained" type="submit">
+                Register
+              </StyledButton>
+            </FormControl>
+          </form>
+        </Container>
+      </Modal>
+      <Modal
+        open={addPatient}
+        onClose={() => setAddPatient(!addPatient)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container
+          sx={{
+            borderRadius: "16px",
+            boxShadow: 3,
+            // width: { xs: 320, md: 420 },
+            // height: { xs: 300, md: 300 },
+            paddingTop: 5,
+            paddingBotom: 5,
+            backgroundColor: "#fff",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: "15rem", lg: "25rem" },
+            p: 4,
+          }}
+        >
+          <form onSubmit={createNewPatient()}>
+            <FormControl
+              style={{
+                alignItems: "center",
+                justifyItems: "center",
+              }}
+            >
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="First name"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("firstName")}
+                value={values1.firstName}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Middle name"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("middleName")}
+                value={values1.middleName}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Last name"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("lastName")}
+                value={values1.lastName}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Mobile number"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("mobileNumber")}
+                value={values1.mobileNumber}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Email number"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("email")}
+                value={values1.email}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                type="number"
+                label="Age"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("age")}
+                value={values1.age}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Gender"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                onChange={handleChange1("gender")}
+                value={values1.gender}
+                required
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Password"
+                type={values1.showPassword ? "text" : "password"}
+                value={values1.password}
+                onChange={handleChange1("password")}
+                required
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword1}
+                        onMouseDown={handleMouseDownPassword1}
+                        edge="end"
+                      >
+                        {values1.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Confirm password"
+                type={values1.showConfirmPassword ? "text" : "password"}
+                value={values1.confirmPassword}
+                onChange={handleChange1("confirmPassword")}
+                required
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword1}
+                        onMouseDown={handleClickShowConfirmPassword1}
+                        edge="end"
+                      >
+                        {values1.showConfirmPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />

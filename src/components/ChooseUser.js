@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -90,7 +90,13 @@ const ChooseUser = () => {
               display: "block",
               color: "#6e6e6e",
             }}
-            onClick={() => navigate("/landing")}
+            onClick={() => {
+              navigate("landing", {
+                state: {
+                  user: "Physician",
+                },
+              });
+            }}
             className={classes.button}
           >
             <img
@@ -110,14 +116,20 @@ const ChooseUser = () => {
               display: "block",
               color: "#6e6e6e",
             }}
-            onClick={() => navigate("/landing")}
+            onClick={() => {
+              navigate("landing", {
+                state: {
+                  user: "Patient",
+                },
+              });
+            }}
             className={classes.button}
           >
             <img
               src="assets/Vector-Animations/Person with medical mask-pana.png"
               style={{ height: "85%", width: "100%" }}
             />
-            <StyledText variant="h6">I am a User</StyledText>
+            <StyledText variant="h6">I am a Patient</StyledText>
           </Button>
         </Grid>
       </Box>
