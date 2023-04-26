@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn --cwd . install && yarn --cwd . build"
+    "heroku-postbuild": "yarn build"
   },
   "eslintConfig": {
     "extends": [
