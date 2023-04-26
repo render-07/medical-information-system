@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn --cwd ./client install && yarn --cwd ./client build"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
