@@ -139,7 +139,7 @@ function createData(
   };
 }
 
-const CarouselPage = ({ data, title }) => {
+const CarouselPage = ({ data, title, asOf, source }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openTable, setOpenTable] = useState(false);
@@ -207,6 +207,19 @@ const CarouselPage = ({ data, title }) => {
               </Grid>
             </Box>
           </StyledBottomGrid>
+          <Typography
+            sx={{
+              fontSize: { xs: 12, md: 15 },
+              marginTop: 2,
+              color: "#fff",
+              wordWrap: "break-word",
+            }}
+          >
+            As of {asOf}. Source:{" "}
+            <a href={source} target="_blank">
+              {source}
+            </a>
+          </Typography>
         </>
       )}
 

@@ -5,7 +5,7 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const secret = config.get("jwtSecret");
 
-//HealthHistory Model
+// HealthHistory Model
 const HealthHistory = require("../model/HealthHistory");
 
 // @router POST api/health-history

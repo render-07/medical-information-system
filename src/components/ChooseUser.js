@@ -56,6 +56,21 @@ const ChooseUser = () => {
         overflowX: "hidden",
       }}
     >
+      <Container
+        sx={{
+          height: 90,
+          width: 90,
+          position: "absolute",
+          top: 10,
+          right: 40,
+        }}
+      >
+        <img
+          src="assets/Icons/logo.ico"
+          alt="drive image"
+          style={{ height: "100%" }}
+        />
+      </Container>
       <StyledHeader
         variant="h2"
         component="div"
@@ -64,7 +79,7 @@ const ChooseUser = () => {
           fontSize: { xs: 15, md: 20 },
         }}
       >
-        COVID PATIENTS' WEB INFO
+        RTUMIstorage
       </StyledHeader>
       <Box
         sx={{

@@ -44,6 +44,7 @@ app.use(cors());
 
 // MongoDB URI
 const db = config.get("mongoURI");
+// localhost connection: "mongoURI": "mongodb://localhost:27017/medical-information-system"
 
 // Connect to MongoDB
 mongoose
@@ -61,6 +62,7 @@ app.use("/api/user/login", require("./api/login"));
 app.use("/api/user/patient", require("./api/patient"));
 app.use("/api/user/physician", require("./api/physician"));
 app.use("/api/health-history", require("./api/healthHistory"));
+app.use("/api/reset-password", require("./api/resetPassword"));
 
 // Declare PORT number (process.env.port is for HEROKU)
 const port = process.env.port || 5000;

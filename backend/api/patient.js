@@ -22,11 +22,19 @@ router.post("/", async (req, res) => {
     password,
   } = req.body;
 
-  // Check existing user
+  // There must be no email existing in physician
+  const physician = await Physician.findOne({ email: email });
+  if (physician) {
+    return res.json({
+      msg: "Email existing in physician.",
+      success: false,
+    });
+  }
+  // Check existing patient
   Patient.findOne({ email: email }).then((patient) => {
     if (patient) {
       return res.json({
-        msg: "Email existing.",
+        msg: "Email existing in patient.",
         success: false,
       });
     }

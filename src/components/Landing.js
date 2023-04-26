@@ -17,6 +17,8 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { loginPhysician, createPhysician } from "../api/physician";
 import { loginPatient, createPatient } from "../api/patient";
+import { goToResetPassword } from "../api/resetPassword";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const StyledMainBox = styled(Box)(({ theme }) => ({}));
 
@@ -68,7 +70,7 @@ const StyledRegisterButton = styled(Button)(({ theme }) => ({
 const Landing = () => {
   const navigate = useNavigate();
   const [addPhysician, setAddPhysician] = useState(false);
-  const [values, setValues] = useState({
+  const [valPhysician, setValPhysician] = useState({
     firstName: "",
     lastName: "",
     mobileNumber: "",
@@ -82,7 +84,7 @@ const Landing = () => {
     showPassword: false,
     showConfirmPassword: false,
   });
-  const [values1, setValues1] = useState({
+  const [valPatient, setValPatient] = useState({
     firstName: "",
     middleName: "",
     lastName: "",
@@ -96,73 +98,103 @@ const Landing = () => {
     showPassword: false,
     showConfirmPassword: false,
   });
+  const [credsLogin, setCredsLogin] = useState({
+    email: "",
+    password: "",
+    showPassword: false,
+  });
   const [addPatient, setAddPatient] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [forgetPassVal, setForgotPasswordVal] = useState({
+    email: "",
+  });
 
   const location = useLocation();
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
+  const handleLoginChange = (prop) => (event) => {
+    event.preventDefault();
+    setCredsLogin({ ...credsLogin, [prop]: event.target.value });
+  };
+
+  const handleLoginClickShowPassword = () => {
+    setCredsLogin({
+      ...credsLogin,
+      showPassword: !credsLogin.showPassword,
     });
   };
 
-  const handleClickShowPassword1 = () => {
-    setValues1({
-      ...values1,
-      showPassword: !values1.showPassword,
+  const handleLoginMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handlePhysicianChange = (prop) => (event) => {
+    event.preventDefault();
+    setValPhysician({ ...valPhysician, [prop]: event.target.value });
+  };
+
+  const handlePhysicianClickShowPassword = () => {
+    setValPhysician({
+      ...valPhysician,
+      showPassword: !valPhysician.showPassword,
     });
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleMouseDownPassword1 = (event) => {
-    event.preventDefault();
-  };
-
-  const handleClickShowConfirmPassword = () => {
-    setValues({
-      ...values,
-      showConfirmPassword: !values.showConfirmPassword,
+  const handlePhysicianClickShowConfirmPassword = () => {
+    setValPhysician({
+      ...valPhysician,
+      showConfirmPassword: !valPhysician.showConfirmPassword,
     });
   };
 
-  const handleClickShowConfirmPassword1 = () => {
-    setValues1({
-      ...values1,
-      showConfirmPassword: !values1.showConfirmPassword,
+  const handlePhysicianMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handlePhysicianMouseDownConfirmPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handlePatientChange = (prop) => (event) => {
+    event.preventDefault();
+    setValPatient({ ...valPatient, [prop]: event.target.value });
+  };
+
+  const handlePatientClickShowPassword = () => {
+    setValPatient({
+      ...valPatient,
+      showPassword: !valPatient.showPassword,
     });
   };
 
-  const handleMouseDownConfirmPassword = (event) => {
+  const handlePatientClickShowConfirmPassword = () => {
+    setValPatient({
+      ...valPatient,
+      showConfirmPassword: !valPatient.showConfirmPassword,
+    });
+  };
+
+  const handlePatientMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  const handleMouseDownConfirmPassword1 = (event) => {
+  const handlePatientMouseDownConfirmPassword = (event) => {
     event.preventDefault();
   };
 
-  const handleChange = (prop) => (event) => {
+  const handleForgetPassChange = (prop) => (event) => {
     event.preventDefault();
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChange1 = (prop) => (event) => {
-    event.preventDefault();
-    setValues1({ ...values1, [prop]: event.target.value });
+    setForgotPasswordVal({ ...forgetPassVal, [prop]: event.target.value });
   };
 
   const createNewPhysician = () => (event) => {
     event.preventDefault();
     const callCreatePhysician = async () => {
       try {
-        if (values.password !== values.confirmPassword) {
+        if (valPhysician.password !== valPhysician.confirmPassword) {
           alert("Password does not match.");
           return;
         }
-        const { data } = await createPhysician(values);
+        const { data } = await createPhysician(valPhysician);
         if (data.success === true) {
           alert(data.msg);
           window.location.reload();
@@ -181,7 +213,7 @@ const Landing = () => {
     const callLoginUser = async () => {
       if (location.state.user === "Physician") {
         try {
-          const { data } = await loginPhysician(values);
+          const { data } = await loginPhysician(credsLogin);
           console.log(data);
           if (data.success === true) {
             // setLocalToken(data.withToken);
@@ -208,7 +240,7 @@ const Landing = () => {
         }
       } else {
         try {
-          const { data } = await loginPatient(values);
+          const { data } = await loginPatient(credsLogin);
           console.log(data);
           if (data.success === true) {
             // setLocalToken(data.withToken);
@@ -240,11 +272,11 @@ const Landing = () => {
     event.preventDefault();
     const callCreatePatient = async () => {
       try {
-        if (values1.password !== values1.confirmPassword) {
+        if (valPatient.password !== valPatient.confirmPassword) {
           alert("Password does not match.");
           return;
         }
-        const { data } = await createPatient(values1);
+        const { data } = await createPatient(valPatient);
         if (data.success === true) {
           alert(data.msg);
           window.location.reload();
@@ -256,6 +288,16 @@ const Landing = () => {
       }
     };
     callCreatePatient();
+  };
+
+  const forgetPassword = () => (event) => {
+    event.preventDefault();
+    const callResetPassword = async () => {
+      const { data } = await goToResetPassword(forgetPassVal);
+      alert(data.msg);
+      setForgotPassword(!forgotPassword);
+    };
+    callResetPassword();
   };
 
   return (
@@ -275,6 +317,38 @@ const Landing = () => {
         overflowX: "hidden",
       }}
     >
+      <Container
+        sx={{
+          fontSize: { xs: 20, lg: 30 },
+          height: 90,
+          width: 90,
+          position: "absolute",
+          top: 31,
+          left: -10,
+        }}
+      >
+        <AiOutlineArrowLeft
+          cursor="pointer"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
+      </Container>
+      <Container
+        sx={{
+          height: 90,
+          width: 90,
+          position: "absolute",
+          top: 10,
+          right: 40,
+        }}
+      >
+        <img
+          src="assets/Icons/logo.ico"
+          alt="drive image"
+          style={{ height: "100%" }}
+        />
+      </Container>
       <StyledHeader
         variant="h2"
         component="div"
@@ -283,7 +357,14 @@ const Landing = () => {
           fontSize: { xs: 15, md: 20 },
         }}
       >
-        COVID PATIENTS' WEB INFO
+        RTUMIstorage - logging in as {location.state.user}
+        {/* <Container
+          sx={{
+            display: { xs: "none", lg: "block" },
+          }}
+        >
+          <AiOutlineUser />
+        </Container> */}
       </StyledHeader>
 
       <Box
@@ -312,7 +393,7 @@ const Landing = () => {
                 component="div"
                 sx={{ fontSize: { xs: 15, md: 15, lg: 20 } }}
               >
-                Lorem Ipsum
+                For school purposes
               </StyledTextHeader2>
               <StyledTextHeader1
                 variant="h1"
@@ -323,7 +404,7 @@ const Landing = () => {
                   fontWeight: 700,
                 }}
               >
-                COVID PATIENTS' WEB INFO
+                RTUMIstorage
               </StyledTextHeader1>
               <StyledTextHeader3
                 variant="h3"
@@ -332,8 +413,8 @@ const Landing = () => {
                   fontSize: { xs: 12, md: 13, lg: 16 },
                 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Let your Revolutionizing covid patient care with a web-based
+                data fabric medical information system flow.
               </StyledTextHeader3>
             </StyledTextContainer>
           </Grid>
@@ -363,8 +444,8 @@ const Landing = () => {
                       width: { xs: 200, md: 350 },
                       fontStyle: "italic",
                     }}
-                    value={values.email}
-                    onChange={handleChange("email")}
+                    value={credsLogin.email}
+                    onChange={handleLoginChange("email")}
                     required
                   />
                   <br />
@@ -375,20 +456,20 @@ const Landing = () => {
                       width: { xs: 200, md: 350 },
                       fontStyle: "italic",
                     }}
-                    type={values.showPassword ? "text" : "password"}
-                    value={values.password}
-                    onChange={handleChange("password")}
+                    type={credsLogin.showPassword ? "text" : "password"}
+                    value={credsLogin.password}
+                    onChange={handleLoginChange("password")}
                     required
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton
                             aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
+                            onClick={handleLoginClickShowPassword}
+                            onMouseDown={handleLoginMouseDownPassword}
                             edge="end"
                           >
-                            {values.showPassword ? (
+                            {credsLogin.showPassword ? (
                               <VisibilityOff />
                             ) : (
                               <Visibility />
@@ -398,40 +479,20 @@ const Landing = () => {
                       ),
                     }}
                   />
-
-                  {/* <TextField
-                    id="demo-helper-text-misaligned"
-                    label="Confirm password"
-                    type={values.showConfirmPassword ? "text" : "password"}
-                    value={values.confirmPassword}
-                    onChange={handleChange("confirmPassword")}
-                    required
-                    sx={{
-                      width: { xs: 200, md: 350 },
-                      fontStyle: "italic",
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowConfirmPassword}
-                            onMouseDown={handleMouseDownConfirmPassword}
-                            edge="end"
-                          >
-                            {values.showConfirmPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  /> */}
                   <StyledButton variant="contained" type="submit">
                     Log in
                   </StyledButton>
+                  <br />
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      textDecorationLine: "underline",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setForgotPassword(!forgotPassword)}
+                  >
+                    Forgot password
+                  </Typography>
                 </FormControl>
               </form>
             </Container>
@@ -500,8 +561,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("firstName")}
-                value={values.firstName}
+                onChange={handlePhysicianChange("firstName")}
+                value={valPhysician.firstName}
                 required
               />
               <br />
@@ -512,8 +573,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("lastName")}
-                value={values.lastName}
+                onChange={handlePhysicianChange("lastName")}
+                value={valPhysician.lastName}
                 required
               />
               <br />
@@ -524,8 +585,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("mobileNumber")}
-                value={values.mobileNumber}
+                onChange={handlePhysicianChange("mobileNumber")}
+                value={valPhysician.mobileNumber}
                 required
               />
               <br />
@@ -536,8 +597,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("email")}
-                value={values.email}
+                onChange={handlePhysicianChange("email")}
+                value={valPhysician.email}
                 required
               />
               <br />
@@ -548,8 +609,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("workAddress")}
-                value={values.workAddress}
+                onChange={handlePhysicianChange("workAddress")}
+                value={valPhysician.workAddress}
                 required
               />
               <br />
@@ -560,8 +621,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("licenses")}
-                value={values.licenses}
+                onChange={handlePhysicianChange("licenses")}
+                value={valPhysician.licenses}
               />
               <br />
               <TextField
@@ -571,8 +632,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("certificates")}
-                value={values.certificates}
+                onChange={handlePhysicianChange("certificates")}
+                value={valPhysician.certificates}
               />
               <br />
               <TextField
@@ -582,16 +643,16 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange("image")}
-                value={values.image}
+                onChange={handlePhysicianChange("image")}
+                value={valPhysician.image}
               />
               <br />
               <TextField
                 id="demo-helper-text-misaligned"
                 label="Password"
-                type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
+                type={valPhysician.showPassword ? "text" : "password"}
+                value={valPhysician.password}
+                onChange={handlePhysicianChange("password")}
                 required
                 sx={{
                   width: { xs: 200, md: 350 },
@@ -602,11 +663,11 @@ const Landing = () => {
                     <InputAdornment position="start">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={handlePhysicianClickShowPassword}
+                        onMouseDown={handlePhysicianMouseDownPassword}
                         edge="end"
                       >
-                        {values.showPassword ? (
+                        {valPhysician.showPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />
@@ -620,9 +681,9 @@ const Landing = () => {
               <TextField
                 id="demo-helper-text-misaligned"
                 label="Confirm password"
-                type={values.showConfirmPassword ? "text" : "password"}
-                value={values.confirmPassword}
-                onChange={handleChange("confirmPassword")}
+                type={valPhysician.showConfirmPassword ? "text" : "password"}
+                value={valPhysician.confirmPassword}
+                onChange={handlePhysicianChange("confirmPassword")}
                 required
                 sx={{
                   width: { xs: 200, md: 350 },
@@ -633,11 +694,11 @@ const Landing = () => {
                     <InputAdornment position="start">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowConfirmPassword}
-                        onMouseDown={handleMouseDownConfirmPassword}
+                        onClick={handlePhysicianClickShowConfirmPassword}
+                        onMouseDown={handlePhysicianMouseDownConfirmPassword}
                         edge="end"
                       >
-                        {values.showConfirmPassword ? (
+                        {valPhysician.showConfirmPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />
@@ -695,8 +756,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("firstName")}
-                value={values1.firstName}
+                onChange={handlePatientChange("firstName")}
+                value={valPatient.firstName}
                 required
               />
               <br />
@@ -707,8 +768,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("middleName")}
-                value={values1.middleName}
+                onChange={handlePatientChange("middleName")}
+                value={valPatient.middleName}
                 required
               />
               <br />
@@ -719,8 +780,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("lastName")}
-                value={values1.lastName}
+                onChange={handlePatientChange("lastName")}
+                value={valPatient.lastName}
                 required
               />
               <br />
@@ -731,8 +792,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("mobileNumber")}
-                value={values1.mobileNumber}
+                onChange={handlePatientChange("mobileNumber")}
+                value={valPatient.mobileNumber}
                 required
               />
               <br />
@@ -743,8 +804,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("email")}
-                value={values1.email}
+                onChange={handlePatientChange("email")}
+                value={valPatient.email}
                 required
               />
               <br />
@@ -756,8 +817,8 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("age")}
-                value={values1.age}
+                onChange={handlePatientChange("age")}
+                value={valPatient.age}
                 required
               />
               <br />
@@ -768,17 +829,17 @@ const Landing = () => {
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
-                onChange={handleChange1("gender")}
-                value={values1.gender}
+                onChange={handlePatientChange("gender")}
+                value={valPatient.gender}
                 required
               />
               <br />
               <TextField
                 id="demo-helper-text-misaligned"
                 label="Password"
-                type={values1.showPassword ? "text" : "password"}
-                value={values1.password}
-                onChange={handleChange1("password")}
+                type={valPatient.showPassword ? "text" : "password"}
+                value={valPatient.password}
+                onChange={handlePatientChange("password")}
                 required
                 sx={{
                   width: { xs: 200, md: 350 },
@@ -789,11 +850,11 @@ const Landing = () => {
                     <InputAdornment position="start">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword1}
-                        onMouseDown={handleMouseDownPassword1}
+                        onClick={handlePatientClickShowPassword}
+                        onMouseDown={handlePatientMouseDownPassword}
                         edge="end"
                       >
-                        {values1.showPassword ? (
+                        {valPatient.showPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />
@@ -807,9 +868,9 @@ const Landing = () => {
               <TextField
                 id="demo-helper-text-misaligned"
                 label="Confirm password"
-                type={values1.showConfirmPassword ? "text" : "password"}
-                value={values1.confirmPassword}
-                onChange={handleChange1("confirmPassword")}
+                type={valPatient.showConfirmPassword ? "text" : "password"}
+                value={valPatient.confirmPassword}
+                onChange={handlePatientChange("confirmPassword")}
                 required
                 sx={{
                   width: { xs: 200, md: 350 },
@@ -820,11 +881,11 @@ const Landing = () => {
                     <InputAdornment position="start">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowConfirmPassword1}
-                        onMouseDown={handleClickShowConfirmPassword1}
+                        onClick={handlePatientClickShowConfirmPassword}
+                        onMouseDown={handlePatientMouseDownConfirmPassword}
                         edge="end"
                       >
-                        {values1.showConfirmPassword ? (
+                        {valPatient.showConfirmPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />
@@ -836,6 +897,60 @@ const Landing = () => {
               />
               <StyledButton variant="contained" type="submit">
                 Register
+              </StyledButton>
+            </FormControl>
+          </form>
+        </Container>
+      </Modal>
+      <Modal
+        open={forgotPassword}
+        onClose={() => setForgotPassword(!forgotPassword)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container
+          sx={{
+            borderRadius: "16px",
+            boxShadow: 3,
+            // width: { xs: 320, md: 420 },
+            // height: { xs: 300, md: 300 },
+            paddingTop: 5,
+            paddingBotom: 5,
+            backgroundColor: "#fff",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            p: 4,
+          }}
+        >
+          <form onSubmit={forgetPassword()}>
+            <FormControl
+              style={{
+                alignItems: "center",
+                justifyItems: "center",
+              }}
+            >
+              <Typography>Provide your email</Typography>
+              <br />
+              <TextField
+                id="demo-helper-text-misaligned"
+                label="Email address"
+                sx={{
+                  width: { xs: 200, md: 350 },
+                  fontStyle: "italic",
+                }}
+                value={forgetPassVal.email}
+                onChange={handleForgetPassChange("email")}
+                required
+              />
+              <StyledButton variant="contained" type="submit">
+                Submit
               </StyledButton>
             </FormControl>
           </form>

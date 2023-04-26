@@ -5,8 +5,9 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const secret = config.get("jwtSecret");
 
-//Physician Model
+// Physician Model
 const Physician = require("../model/Physician");
+// Patient Model
 const Patient = require("../model/Patient");
 
 // @router POST api/user/login/physician
@@ -135,4 +136,5 @@ router.post("/patient", async (req, res) => {
     }
   });
 });
+
 module.exports = router;

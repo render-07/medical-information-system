@@ -40,20 +40,22 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
+        header: "685,679,893",
         description: "total number of cases",
       },
       {
         id: 2,
-        header: "6,558,259",
+        header: "6,842,570",
         description: "total number of deaths",
       },
       {
         id: 3,
-        header: "605,320,653",
+        header: "658,410,643",
         description: "total number of recovered",
       },
     ],
+    asOf: "2023",
+    source: "https://www.worldometers.info/coronavirus/",
   },
   {
     id: 2,
@@ -61,20 +63,23 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
+        header: "26,000,000",
         description: "total number of cases",
       },
       {
         id: 2,
-        header: "6,558,259",
-        description: "total number of deaths",
+        header: "290,000",
+        description: "hospitalizations",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "19,000",
+        description: "deaths",
       },
     ],
+    asOf: "2022-2023",
+    source:
+      "https://www.cdc.gov/flu/weekly/index.htm#:~:text=Two%20influenza%2Dassociated%20pediatric%20deaths,and%2019%2C000%20deaths%20from%20flu.",
   },
   {
     id: 3,
@@ -82,20 +87,22 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
+        header: "8,098",
         description: "total number of cases",
       },
       {
         id: 2,
-        header: "6,558,259",
+        header: "774",
         description: "total number of deaths",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "0",
+        description: "new cases",
       },
     ],
+    asOf: "2004",
+    source: "https://www.cdc.gov/sars/about/fs-sars.html",
   },
 
   {
@@ -104,20 +111,23 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
+        header: "2604",
         description: "total number of cases",
       },
       {
         id: 2,
-        header: "6,558,259",
+        header: "936",
         description: "total number of deaths",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "0",
+        description: "new cases",
       },
     ],
+    asOf: "2012",
+    source:
+      "https://www.emro.who.int/health-topics/mers-cov/mers-outbreaks.html",
   },
   {
     id: 5,
@@ -125,20 +135,23 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
-        description: "total number of cases",
+        header: "491,382",
+        description: "total number of confirmed lab cases",
       },
       {
         id: 2,
-        header: "6,558,259",
-        description: "total number of deaths",
+        header: "284,000",
+        description: "estimated excess deaths",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "1",
+        description: "laboratory-confirmed case as of 11 May 2022",
       },
     ],
+    asOf: "2022",
+    source:
+      "https://www.who.int/emergencies/disease-outbreak-news/item/2022-DON384",
   },
   {
     id: 6,
@@ -146,20 +159,23 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
-        description: "total number of cases",
+        header: "868",
+        description: "total number of cases of human infection",
       },
       {
         id: 2,
-        header: "6,558,259",
+        header: "457",
         description: "total number of deaths",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "240",
+        description: "new cases as of 6 April 2023",
       },
     ],
+    asOf: "2023",
+    source:
+      "https://www.who.int/docs/default-source/wpro---documents/emergency/surveillance/avian-influenza/ai_20230407.pdf?sfvrsn=22ea0816_26",
   },
   {
     id: 7,
@@ -167,20 +183,22 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
+        header: "34,356",
         description: "total number of cases",
       },
       {
         id: 2,
-        header: "6,558,259",
+        header: "14,823",
         description: "total number of deaths",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "164",
+        description: "cases in Mubende District, Uganda",
       },
     ],
+    asOf: "2023",
+    source: "https://gh.bmj.com/content/5/3/e001955",
   },
   {
     id: 8,
@@ -188,20 +206,22 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
-        description: "total number of cases",
+        header: "40,249",
+        description: "cases as of 2022",
       },
       {
         id: 2,
-        header: "6,558,259",
-        description: "total number of deaths",
+        header: "3,268",
+        description: "were lab-confirmed (8.1%)",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "2",
+        description: "zika-related death was reported for the year",
       },
     ],
+    asOf: "2022",
+    source: "https://ais.paho.org/ha_viz/Arbo/Arbo_Bulletin_2022.asp?env=pri",
   },
   {
     id: 9,
@@ -209,20 +229,22 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
-        description: "total number of cases",
+        header: " 200,000",
+        description: "number of cases yearly",
       },
       {
         id: 2,
-        header: "6,558,259",
-        description: "total number of deaths",
+        header: "30,000",
+        description: "number of deaths yearly",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "7",
+        description: "new cases as of 2022",
       },
     ],
+    asOf: "2022",
+    source: "https://www.who.int/",
   },
   {
     id: 10,
@@ -230,20 +252,23 @@ const virusData = [
     data: [
       {
         id: 1,
-        header: "625,712,586",
-        description: "total number of cases",
+        header: "2,000,000",
+        description: "cases since 2005",
       },
       {
         id: 2,
-        header: "6,558,259",
-        description: "total number of deaths",
+        header: "115,539 ",
+        description: "new cases as of 2023",
       },
       {
         id: 3,
-        header: "605,320,653",
-        description: "total number of recovered",
+        header: "33",
+        description: "deaths reported as of 2023",
       },
     ],
+    asOf: "2023",
+    source:
+      "https://reliefweb.int/report/world/epidemiological-alert-chikungunya-increase-region-americas-13-february-2023",
   },
 ];
 
@@ -760,7 +785,12 @@ const MainPage = (props) => {
         >
           <Carousel breakPoints={breakPoints}>
             {virusData.map((item, index) => (
-              <CarouselPage title={item.title} data={item.data} />
+              <CarouselPage
+                title={item.title}
+                data={item.data}
+                asOf={item.asOf}
+                source={item.source}
+              />
             ))}
           </Carousel>
         </StyledMainBox>

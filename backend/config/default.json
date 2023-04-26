@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb://localhost:27017/medical-information-system",
+  "mongoURI": "mongodb+srv://admin:admin@rtumistorage.evpxwxe.mongodb.net/?retryWrites=true&w=majority",
   "jwtSecret": "happy"
 }

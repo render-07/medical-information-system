@@ -4,10 +4,10 @@ const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
 
-//Physician Model
+// Physician Model
 const Physician = require("../model/Physician");
 
-//Patient Model
+// Patient Model
 const Patient = require("../model/Patient");
 
 // @router POST api/user/physician
@@ -18,11 +18,20 @@ router.post("/", async (req, res) => {
   const { firstName, lastName, mobileNumber, email, workAddress, password } =
     req.body;
 
+  // There must be no email existing in patient
+  const patient = await Patient.findOne({ email });
+  if (patient) {
+    return res.json({
+      msg: "Email existing in patient.",
+      success: false,
+    });
+  }
+
   // Check existing physician
   Physician.findOne({ email: email }).then((physician) => {
     if (physician) {
       return res.json({
-        msg: "Email existing.",
+        msg: "Email existing in physician.",
         success: false,
       });
     }
