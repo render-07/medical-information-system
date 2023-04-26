@@ -65,6 +65,6 @@ app.use("/api/health-history", require("./api/healthHistory"));
 app.use("/api/reset-password", require("./api/resetPassword"));
 
 // Declare PORT number (process.env.port is for HEROKU)
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
