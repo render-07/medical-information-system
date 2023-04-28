@@ -51,7 +51,6 @@ router.post("/physician", async (req, res) => {
             email: user.email,
             workAddress: user.workAddress,
             licenses: user.licenses,
-            certificates: user.certificates,
             image: user.image,
             withToken,
           },

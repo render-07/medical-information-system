@@ -77,7 +77,6 @@ const Landing = () => {
     email: "",
     workAddress: "",
     licenses: "",
-    certificates: "",
     image: "",
     password: "",
     confirmPassword: "",
@@ -228,7 +227,6 @@ const Landing = () => {
                 email: data.data.email,
                 workAddress: data.data.workAddress,
                 licenses: data.data.licenses,
-                certificates: data.data.certificates,
                 image: data.data.image,
               },
             });
@@ -616,24 +614,13 @@ const Landing = () => {
               <br />
               <TextField
                 id="demo-helper-text-misaligned"
-                label="Licenses"
+                label="License number"
                 sx={{
                   width: { xs: 200, md: 350 },
                   fontStyle: "italic",
                 }}
                 onChange={handlePhysicianChange("licenses")}
                 value={valPhysician.licenses}
-              />
-              <br />
-              <TextField
-                id="demo-helper-text-misaligned"
-                label="Certificates"
-                sx={{
-                  width: { xs: 200, md: 350 },
-                  fontStyle: "italic",
-                }}
-                onChange={handlePhysicianChange("certificates")}
-                value={valPhysician.certificates}
               />
               <br />
               <TextField

@@ -32,10 +32,6 @@ const PhysicianSchema = new Schema({
     type: String,
     required: false,
   },
-  certificates: {
-    type: String,
-    required: false,
-  },
   image: {
     type: String,
     required: true,

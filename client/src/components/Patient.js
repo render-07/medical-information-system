@@ -974,16 +974,7 @@ const Patient = (props) => {
                       Work address: {searchedPhysician.workAddress}
                     </Typography>
                     <Typography variant="h6" component="div">
-                      Licenses:{" "}
-                      <a href={searchedPhysician.licenses} target="_blank">
-                        click here
-                      </a>
-                    </Typography>
-                    <Typography variant="h6" component="div">
-                      Certficates:{" "}
-                      <a href={searchedPhysician.certificates} target="_blank">
-                        click here
-                      </a>
+                      License number: {searchedPhysician.licenses}
                     </Typography>
                   </StyledTextContainer>
                 </StyledPaper>

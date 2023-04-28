@@ -15,8 +15,15 @@ const Patient = require("../model/Patient");
 // @access Public
 router.post("/", async (req, res) => {
   // Deconstructuring
-  const { firstName, lastName, mobileNumber, email, workAddress, password } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    mobileNumber,
+    email,
+    workAddress,
+    licenses,
+    password,
+  } = req.body;
 
   // There must be no email existing in patient
   const patient = await Patient.findOne({ email });
@@ -43,10 +50,7 @@ router.post("/", async (req, res) => {
       mobileNumber,
       email,
       workAddress,
-      licenses:
-        "https://drive.google.com/uc?export=view&id=" + req.body.licenses,
-      certificates:
-        "https://drive.google.com/uc?export=view&id=" + req.body.certificates,
+      licenses,
       image: "https://drive.google.com/uc?export=view&id=" + req.body.image,
       password,
     });
@@ -79,12 +83,7 @@ router.post("/", async (req, res) => {
                   mobileNumber: user.mobileNumber,
                   email: user.email,
                   workAddress: user.workAddress,
-                  licenses:
-                    "https://drive.google.com/uc?export=view&id=" +
-                    user.licenses,
-                  certificates:
-                    "https://drive.google.com/uc?export=view&id=" +
-                    user.certificates,
+                  licenses: user.licenses,
                   image:
                     "https://drive.google.com/uc?export=view&id=" + user.image,
                 },

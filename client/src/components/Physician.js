@@ -875,16 +875,7 @@ const MainPage = (props) => {
                       Work address: {location.state.email}
                     </Typography>
                     <Typography variant="h6" component="div">
-                      License:{" "}
-                      <a href={location.state.licenses} target="_blank">
-                        click here
-                      </a>
-                    </Typography>
-                    <Typography variant="h6" component="div">
-                      Certificates:{" "}
-                      <a href={location.state.certificates} target="_blank">
-                        click here
-                      </a>
+                      License number: {location.state.licenses}
                     </Typography>
                   </StyledTextContainer>
                 </StyledPaper>
