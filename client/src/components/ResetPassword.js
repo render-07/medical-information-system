@@ -98,6 +98,7 @@ const ResetPassword = () => {
   return (
     <StyledMainBox
       sx={{
+        backgroundImage: "url(assets/Background/2-gradient-shapes.png)",
         height: "100%",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
