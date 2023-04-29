@@ -49,16 +49,6 @@ mongoose
   .then(() => console.log("Connected"))
   .catch((err) => console.log(err));
 
-// Serve static assets if in production
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static("client/build"));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
-
 // Use routes
 // Anything the goes to api/items, should refer to items variable
 // app.use("/api/users", require("./api/users"));
@@ -68,6 +58,15 @@ app.use("/api/user/physician", require("./api/physician"));
 app.use("/api/health-history", require("./api/healthHistory"));
 app.use("/api/reset-password", require("./api/resetPassword"));
 
+// Serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 // Declare PORT number (process.env.port is for HEROKU)
 const port = process.env.PORT || 5000;
 
