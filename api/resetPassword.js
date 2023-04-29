@@ -40,7 +40,7 @@ router.post("/link-sent", async (req, res) => {
 
   newToken.save().catch((error) => console.log(error));
 
-  let clientURL = "https://rtumistorage.herokuapp.com/reset-password";
+  let clientURL = "rtumistorage.herokuapp.com/reset-password";
 
   const link = `${clientURL}/updateYourPassword?token=${resetToken}&email=${email}`;
   sendEmail(
