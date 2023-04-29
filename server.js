@@ -10,6 +10,7 @@ const app = express();
 
 // Bring in config
 const config = require("config");
+const path = require("path");
 
 // Body-parser middleware
 // Body-parser allow us to take request and get the data from the body

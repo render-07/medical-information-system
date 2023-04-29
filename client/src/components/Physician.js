@@ -355,25 +355,24 @@ const MainPage = (props) => {
     return data;
   };
 
-  const storeAllPatients = async () => {
-    const dataFromServer = await readAllPatients();
-    setAllPatients(dataFromServer.patients);
-  };
-
   const readAllHealthHistory = async () => {
     const { data } = await getAllHealthHistory();
     return data;
   };
 
-  const storeAllHealthHistory = async () => {
-    const dataFromServer = await readAllHealthHistory();
-    setAllHealthHistory(dataFromServer.healthHistories);
-  };
-
   useEffect(() => {
-    storeAllPatients();
-    storeAllHealthHistory();
-    //searchForPatient(patient);
+    const storeAllPatients = async () => {
+      const dataFromServer = await readAllPatients();
+      setAllPatients(dataFromServer.patients);
+    };
+
+    const storeAllHealthHistory = async () => {
+      const dataFromServer = await readAllHealthHistory();
+      setAllHealthHistory(dataFromServer.healthHistories);
+    };
+
+    storeAllPatients().catch(console.error);
+    storeAllHealthHistory().catch(console.error);
   }, []);
 
   const handleDrawerToggle = () => {
