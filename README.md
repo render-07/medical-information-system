@@ -29,6 +29,8 @@ Link: https://rtumistorage.herokuapp.com/ . Backend server is locally hosted at 
 
         yarn server
 
+- For more instructions visit official website of Heroku at https://devcenter.heroku.com/articles.
+
 #
 
 #
