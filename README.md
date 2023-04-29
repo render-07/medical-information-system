@@ -25,9 +25,11 @@ Link: https://rtumistorage.herokuapp.com/ . Backend server is locally hosted at 
 
         heroku login
 
-- Lastly is to run the backend server of the app in the root directory.
+- Lastly is to run the backend server of the app in the root directory and the frontend of the app in the client directory.
 
         yarn server
+
+        yarn start
 
 - For more instructions visit official website of Heroku at https://devcenter.heroku.com/articles.
 
