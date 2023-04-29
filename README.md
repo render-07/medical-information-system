@@ -18,19 +18,6 @@ In the project directory, you can:
 
 Link: https://rtumistorage.herokuapp.com/ . Backend server is locally hosted at `mongodb+srv://admin:admin@cluster0.vwkueqo.mongodb.net/?retryWrites=true&w=majority` .
 
-### Instruction:
-
-- Download heroku at https://devcenter.heroku.com/articles/heroku-cli
-- Login at heroku in Visual Studio Code. Run the command below. After it will tell to login externally. Pre-requisite is to enroll Heroku account in a Salesforce Authenticator app.
-
-        heroku login
-
-- Lastly is to run the backend server of the app in the root directory and the frontend of the app in the client directory.
-
-        yarn server
-
-        yarn start
-
 - For more instructions visit official website of Heroku at https://devcenter.heroku.com/articles.
 
 #
