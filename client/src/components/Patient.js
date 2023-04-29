@@ -655,26 +655,25 @@ const Patient = (props) => {
           </FormControl>
           <Box sx={{ flexGrow: 1, margin: { xs: "0 40px", lg: "0 90px" } }}>
             <Grid container spacing={{ xs: 2, md: 3 }}>
-              {allHealthHistory &&
-                allHealthHistory.map((value, index) => (
-                  <Grid item key={index} xs={12} sm={4} md={3}>
-                    <ListOfPatients
-                      patientId={value._id}
-                      firstName={value.firstName}
-                      middleName={value.middleName}
-                      lastName={value.lastName}
-                      mobileNumber={value.mobileNumber}
-                      age={value.age}
-                      gender={value.gender}
-                      description={value.description}
-                      date={value.registerDate}
-                      user={location.state.user}
-                      healthHistory={value.healthHistory}
-                      yearManifested={value.yearManifested}
-                      physicianInCharge={value.physicianInCharge}
-                    />
-                  </Grid>
-                ))}
+              {allHealthHistory.map((value, index) => (
+                <Grid item key={index} xs={12} sm={4} md={3}>
+                  <ListOfPatients
+                    patientId={value._id}
+                    firstName={value.firstName}
+                    middleName={value.middleName}
+                    lastName={value.lastName}
+                    mobileNumber={value.mobileNumber}
+                    age={value.age}
+                    gender={value.gender}
+                    description={value.description}
+                    date={value.registerDate}
+                    user={location.state.user}
+                    healthHistory={value.healthHistory}
+                    yearManifested={value.yearManifested}
+                    physicianInCharge={value.physicianInCharge}
+                  />
+                </Grid>
+              ))}
             </Grid>
           </Box>
           <Container

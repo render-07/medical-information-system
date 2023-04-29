@@ -621,25 +621,24 @@ const MainPage = (props) => {
           </FormControl>
           <Box sx={{ flexGrow: 1, margin: { xs: "0 40px", lg: "0 90px" } }}>
             <Grid container spacing={{ xs: 2, md: 3 }}>
-              {allPatients &&
-                allPatients.map((value, index) => (
-                  <Grid item key={index} xs={12} sm={4} md={3}>
-                    <ListOfPatients
-                      patientId={value._id}
-                      firstName={value.firstName}
-                      middleName={value.middleName}
-                      lastName={value.lastName}
-                      mobileNumber={value.mobileNumber}
-                      age={value.age}
-                      gender={value.gender}
-                      description={value.healthHistory}
-                      date={value.registerDate}
-                      user="Physician"
-                      nameOfPhysician={location.state.physiciansFullname}
-                      email={value.email}
-                    />
-                  </Grid>
-                ))}
+              {allPatients.map((value, index) => (
+                <Grid item key={index} xs={12} sm={4} md={3}>
+                  <ListOfPatients
+                    patientId={value._id}
+                    firstName={value.firstName}
+                    middleName={value.middleName}
+                    lastName={value.lastName}
+                    mobileNumber={value.mobileNumber}
+                    age={value.age}
+                    gender={value.gender}
+                    description={value.healthHistory}
+                    date={value.registerDate}
+                    user="Physician"
+                    nameOfPhysician={location.state.physiciansFullname}
+                    email={value.email}
+                  />
+                </Grid>
+              ))}
             </Grid>
           </Box>
         </StyledMainBox>
