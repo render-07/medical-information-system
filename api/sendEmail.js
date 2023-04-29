@@ -11,7 +11,7 @@ const sendEmail = async (email, subject, payload, template) => {
       port: 465,
       auth: {
         user: "rtumistorage@gmail.com",
-        pass: "rtumistorageadmin", // naturally, replace both with your real credentials or an application-specific password
+        pass: "egxfyuyfieozahcc", // rtumistorageadmin = naturally, replace both with your real credentials or an application-specific password
       },
     });
 
