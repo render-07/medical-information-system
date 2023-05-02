@@ -47,6 +47,7 @@ router.post("/", async (req, res) => {
       email,
       age,
       gender,
+      physicianInCharge: "",
       password,
     });
 
@@ -84,6 +85,7 @@ router.post("/", async (req, res) => {
                   email: user.email,
                   age: user.age,
                   gender: user.gender,
+                  physicianInCharge: user.physicianInCharge,
                   healthHistory: user.healthHistory,
                 },
               });
@@ -101,6 +103,20 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   Patient.find().then((patients) =>
     res.json({ patients, msg: "All patients.", success: true })
+  );
+});
+
+// @router PUT api/user/patient/update-physician
+// @desc   Update patient's physician
+// @access Public
+router.put("/update-physician", async (req, res) => {
+  const { email, physicianInCharge } = req.body;
+
+  Patient.updateOne(
+    { email },
+    { $set: { physicianInCharge: physicianInCharge } }
+  ).then((data) =>
+    res.json({ data, msg: "Patient's physician is updated.", success: true })
   );
 });
 

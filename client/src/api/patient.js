@@ -11,3 +11,7 @@ export const createPatient = async (params) => {
 export const readAllPatient = async () => {
   return axios.get("/api/user/patient/");
 };
+
+export const updatePatientsPhysician = async (params) => {
+  return axios.put("/api/user/patient/update-physician", params);
+};

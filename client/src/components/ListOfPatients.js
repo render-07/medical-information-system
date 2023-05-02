@@ -4,13 +4,19 @@ import {
   Card,
   CardContent,
   Container,
+  IconButton,
   Modal,
   Stack,
   styled,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { MdViewList } from "react-icons/md";
-import { AiFillPrinter, AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiFillPlusCircle,
+  AiOutlinePlus,
+} from "react-icons/ai";
 
 import { getPatientsHealthHistories } from "../api/healthHistory";
 
@@ -44,10 +50,17 @@ const ListOfPatients = ({
   user,
   healthHistory,
   description,
+  medication,
+  diagnosis,
+  procedures,
   yearManifested,
   physicianInCharge,
   nameOfPhysician,
   email,
+  setAddHealthHistory,
+  addHealthHistory,
+  setPatientEmail,
+  setPatientUserId,
   // value.email,
 }) => {
   const [openPatientInfo, setOpenPatientInfo] = useState(false);
@@ -72,19 +85,22 @@ const ListOfPatients = ({
         // combine health histories to string
         healthHistories += item.healthHistory + ", ";
         // check if physician logged in have consent to patient's health history
-        if (item.physicianInCharge == nameOfPhysician) {
-          setAuthorized(true);
-        }
+        // if (item.physicianInCharge == nameOfPhysician) {
+        //   setAuthorized(true);
+        // }
       });
       setPatientHealthHistories(healthHistories);
     }
   };
 
   useEffect(() => {
+    // console.log(nameOfPhysician);
+    // console.log(physicianInCharge);
     storePatientHealthHistories(email);
+    if (nameOfPhysician == physicianInCharge) {
+      setAuthorized(true);
+    }
   }, []);
-
-  //console.log(sdsd());
 
   return (
     <>
@@ -93,19 +109,18 @@ const ListOfPatients = ({
           <CardContent sx={{ display: "flex", flexDirection: "row" }}>
             <Box>
               <StyledHeader variant="h6" gutterBottom>
-                <MdViewList
-                  style={{
-                    fontSize: 25,
-                    marginRight: "10px",
-                    color: "#BBBBBB",
-                    marginTop: -2,
-                  }}
-                  onClick={() => {
-                    setOpenPatientInfo(!openPatientInfo);
-                    storePatientHealthHistories(email);
-                  }}
-                  cursor="pointer"
-                />
+                <Tooltip title="Expand">
+                  <IconButton sx={{ marginLeft: -1, marginTop: -3 }}>
+                    <MdViewList
+                      onClick={() => {
+                        setOpenPatientInfo(!openPatientInfo);
+                        storePatientHealthHistories(email);
+                      }}
+                      size="15px"
+                      cursor="pointer"
+                    />
+                  </IconButton>
+                </Tooltip>
                 Patient {patientId}
               </StyledHeader>
               <Typography variant="body2" sx={{ mb: 1.5 }}>
@@ -142,23 +157,28 @@ const ListOfPatients = ({
                   p: 4,
                 }}
               >
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  justifyContent="space-between"
-                >
+                <Stack direction="row" justifyContent="space-between">
                   <StyledHeader>Patient {patientId}</StyledHeader>
+                  <Tooltip title="Add health history for this patient">
+                    <IconButton>
+                      <AiFillPlusCircle
+                        color="#5998F8"
+                        onClick={() => {
+                          setAddHealthHistory(!addHealthHistory);
+                          setPatientEmail(email);
+                          setPatientUserId(patientId);
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
 
-                  <AiOutlineClose
-                    style={{
-                      fontSize: 25,
-                      marginRight: "10px",
-                      color: "#707070",
-                      marginTop: -2,
-                    }}
-                    onClick={() => setOpenPatientInfo(!openPatientInfo)}
-                    cursor="pointer"
-                  />
+                  <IconButton>
+                    <AiOutlineClose
+                      onClick={() => setOpenPatientInfo(!openPatientInfo)}
+                      cursor="pointer"
+                      color="#cc4b4b"
+                    />
+                  </IconButton>
                 </Stack>
                 <br />
                 <Typography sx={{ mb: 1.5 }}>
@@ -207,17 +227,13 @@ const ListOfPatients = ({
                   justifyContent="space-between"
                 >
                   <StyledHeader>Patient {patientId}</StyledHeader>
-
-                  <AiOutlineClose
-                    style={{
-                      fontSize: 25,
-                      marginRight: "10px",
-                      color: "#707070",
-                      marginTop: -2,
-                    }}
-                    onClick={() => setOpenPatientInfo(!openPatientInfo)}
-                    cursor="pointer"
-                  />
+                  <IconButton>
+                    <AiOutlineClose
+                      onClick={() => setOpenPatientInfo(!openPatientInfo)}
+                      cursor="pointer"
+                      color="#cc4b4b"
+                    />
+                  </IconButton>
                 </Stack>
                 <br />
                 <Typography sx={{ mb: 1.5 }}>
@@ -233,16 +249,15 @@ const ListOfPatients = ({
           <CardContent sx={{ display: "flex", flexDirection: "row" }}>
             <Box>
               <StyledHeader variant="h6" gutterBottom>
-                <MdViewList
-                  style={{
-                    fontSize: 25,
-                    marginRight: "10px",
-                    color: "#BBBBBB",
-                    marginTop: -2,
-                  }}
-                  onClick={() => setOpenPatientInfo(!openPatientInfo)}
-                  cursor="pointer"
-                />
+                <Tooltip title="Expand">
+                  <IconButton sx={{ marginLeft: -1, marginTop: -3 }}>
+                    <MdViewList
+                      onClick={() => setOpenPatientInfo(!openPatientInfo)}
+                      size="15px"
+                      cursor="pointer"
+                    />
+                  </IconButton>
+                </Tooltip>
                 Health history ID: {patientId}
               </StyledHeader>
               <Typography variant="body2" sx={{ mb: 1.5 }}>
@@ -286,17 +301,13 @@ const ListOfPatients = ({
                   justifyContent="space-between"
                 >
                   <StyledHeader> Health history ID: {patientId}</StyledHeader>
-
-                  <AiOutlineClose
-                    style={{
-                      fontSize: 25,
-                      marginRight: "10px",
-                      color: "#707070",
-                      marginTop: -2,
-                    }}
-                    onClick={() => setOpenPatientInfo(!openPatientInfo)}
-                    cursor="pointer"
-                  />
+                  <IconButton>
+                    <AiOutlineClose
+                      onClick={() => setOpenPatientInfo(!openPatientInfo)}
+                      cursor="pointer"
+                      color="#cc4b4b"
+                    />
+                  </IconButton>
                 </Stack>
                 <Typography sx={{ mb: 1.5 }}>
                   <br />
@@ -307,6 +318,13 @@ const ListOfPatients = ({
                 </Typography>
                 <Typography sx={{ mb: 1.5 }}>
                   Date or year manifested: {yearManifested}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }}>
+                  Medication: {medication}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }}>Diagnosis: {diagnosis}</Typography>
+                <Typography sx={{ mb: 1.5 }}>
+                  Procedures: {procedures}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }}>
                   Physician in charge: {physicianInCharge}

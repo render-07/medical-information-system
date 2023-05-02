@@ -20,6 +20,7 @@ import {
   styled,
   TextField,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,7 @@ import {
   createHealthHistory,
   getMyHealthHistories,
 } from "../api/healthHistory";
+import { updatePatientsPhysician } from "../api/patient";
 import Carousel from "react-elastic-carousel";
 import CarouselPage from "./CarouselPage";
 import { AiOutlineUser } from "react-icons/ai";
@@ -275,6 +277,7 @@ const virusData = [
       "https://reliefweb.int/report/world/epidemiological-alert-chikungunya-increase-region-americas-13-february-2023",
   },
 ];
+
 const breakPoints = [
   { width: 1, itemToShow: 1 },
   { width: 550, itemToShow: 1 },
@@ -340,7 +343,7 @@ const Patient = (props) => {
   const navigate = useNavigate();
   const [logout, setLogout] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [addHealthHistory, setAddHealthHistory] = useState(false);
+  const [updatePatientPhysician, setUpdatePatientPhysician] = useState(false);
   const [allPhysicians, setAllPhysicians] = useState([]);
   const [allHealthHistory, setAllHealthHistory] = useState([]);
   const [homeClick, setHomeClick] = useState(true);
@@ -351,14 +354,11 @@ const Patient = (props) => {
   const [consent, setConsent] = useState(false);
   const [showResult, setShowResult] = useState(true);
   const [showPhysicianResult, setShowPhysicianResult] = useState(true);
-  const [values, setValues] = useState({
-    patientId: JSON.stringify(location.state.email).substring(
+  const [physicianInCharge, setPhysicianInCharge] = useState({
+    email: JSON.stringify(location.state.email).substring(
       1,
       JSON.stringify(location.state.email).length - 1
     ),
-    healthHistory: "",
-    description: "",
-    yearManifested: "",
     physicianInCharge: "",
   });
   const [physician, setPhysician] = useState("");
@@ -399,8 +399,8 @@ const Patient = (props) => {
     event.preventDefault();
     const callCreateHealthHistory = async () => {
       try {
-        console.log(values);
-        const { data } = await createHealthHistory(values);
+        console.log(physicianInCharge);
+        const { data } = await createHealthHistory(physicianInCharge);
         if (data.success === true) {
           alert(data.msg);
         } else {
@@ -411,6 +411,24 @@ const Patient = (props) => {
       }
     };
     callCreateHealthHistory();
+  };
+
+  const updatePhysicianInCharge = () => (event) => {
+    event.preventDefault();
+    const callUpdatePhysInCharge = async () => {
+      try {
+        console.log(physicianInCharge);
+        const { data } = await updatePatientsPhysician(physicianInCharge);
+        if (data.success === true) {
+          alert(data.msg);
+        } else {
+          alert(data.msg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    callUpdatePhysInCharge();
   };
 
   const drawer = (
@@ -464,11 +482,6 @@ const Patient = (props) => {
 
   //console.log(location.state.email);
 
-  const handleChange = (prop) => (event) => {
-    event.preventDefault();
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
   const fetchData = (value) => {
     const result = allPhysicians.filter((user) => {
       return (
@@ -482,7 +495,7 @@ const Patient = (props) => {
 
   const handleSearchChange = (prop) => (event) => {
     event.preventDefault();
-    setValues({ ...values, [prop]: event.target.value });
+    setPhysicianInCharge({ ...physicianInCharge, [prop]: event.target.value });
     fetchData(event.target.value);
     setShowResult(true);
   };
@@ -666,6 +679,9 @@ const Patient = (props) => {
                     age={value.age}
                     gender={value.gender}
                     description={value.description}
+                    medication={value.medication}
+                    diagnosis={value.diagnosis}
+                    procedures={value.procedures}
                     date={value.registerDate}
                     user={location.state.user}
                     healthHistory={value.healthHistory}
@@ -678,7 +694,6 @@ const Patient = (props) => {
           </Box>
           <Container
             sx={{
-              fontSize: { xs: 70, lg: 80 },
               position: "fixed",
               bottom: 0,
               right: 0,
@@ -686,7 +701,15 @@ const Patient = (props) => {
               justifyContent: "flex-end",
             }}
           >
-            <FcPlus cursor="pointer" onClick={() => setConsent(!consent)} />
+            <Tooltip title="Give consent to physician">
+              <IconButton>
+                <FcPlus
+                  size="80px"
+                  cursor="pointer"
+                  onClick={() => setConsent(!consent)}
+                />
+              </IconButton>
+            </Tooltip>
           </Container>
 
           {consent && (
@@ -766,7 +789,7 @@ const Patient = (props) => {
                   <StyledButton
                     variant="contained"
                     onClick={() => {
-                      setAddHealthHistory(!addHealthHistory);
+                      setUpdatePatientPhysician(!updatePatientPhysician);
                       setConsent(!consent);
                     }}
                   >
@@ -777,10 +800,10 @@ const Patient = (props) => {
             </Modal>
           )}
 
-          {addHealthHistory && (
+          {updatePatientPhysician && (
             <Modal
-              open={addHealthHistory}
-              onClose={() => setAddHealthHistory(!addHealthHistory)}
+              open={updatePatientPhysician}
+              onClose={() => setUpdatePatientPhysician(!updatePatientPhysician)}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
@@ -805,7 +828,7 @@ const Patient = (props) => {
                   p: 4,
                 }}
               >
-                <form onSubmit={createNewHealthHistory()}>
+                <form onSubmit={updatePhysicianInCharge()}>
                   <FormControl
                     style={{
                       alignItems: "center",
@@ -826,48 +849,13 @@ const Patient = (props) => {
                     <br />
                     <TextField
                       id="demo-helper-text-misaligned"
-                      label="Health history"
-                      sx={{
-                        width: { xs: 200, md: 350 },
-                        fontStyle: "italic",
-                      }}
-                      onChange={handleChange("healthHistory")}
-                      value={values.healthHistory}
-                      required
-                    />
-                    <br />
-                    <TextField
-                      id="demo-helper-text-misaligned"
-                      label="Description"
-                      sx={{
-                        width: { xs: 200, md: 350 },
-                        fontStyle: "italic",
-                      }}
-                      onChange={handleChange("description")}
-                      value={values.description}
-                    />
-                    <br />
-                    <TextField
-                      id="demo-helper-text-misaligned"
-                      label="Date or year manifested"
-                      sx={{
-                        width: { xs: 200, md: 350 },
-                        fontStyle: "italic",
-                      }}
-                      onChange={handleChange("yearManifested")}
-                      value={values.yearManifested}
-                      required
-                    />
-                    <br />
-                    <TextField
-                      id="demo-helper-text-misaligned"
                       label="Physician in charge"
                       sx={{
                         width: { xs: 200, md: 350 },
                         fontStyle: "italic",
                       }}
                       onChange={handleSearchChange("physicianInCharge")}
-                      value={values.physicianInCharge}
+                      value={physicianInCharge.physicianInCharge}
                       required
                     />
                     {showResult && (
@@ -880,8 +868,8 @@ const Patient = (props) => {
                           <ListItem
                             key={index}
                             onClick={() => {
-                              setValues({
-                                ...values,
+                              setPhysicianInCharge({
+                                ...physicianInCharge,
                                 physicianInCharge: value.fullName,
                               });
                               setShowResult(false);

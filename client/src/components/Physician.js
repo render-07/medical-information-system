@@ -32,6 +32,7 @@ import { getAllHealthHistory } from "../api/healthHistory";
 import Carousel from "react-elastic-carousel";
 import CarouselPage from "./CarouselPage";
 import { AiOutlineClose, AiOutlineUser } from "react-icons/ai";
+import { createHealthHistory } from "../api/healthHistory";
 
 const virusData = [
   {
@@ -349,6 +350,26 @@ const MainPage = (props) => {
   const [openSearch, setOpenSearch] = useState(false);
   const [searchedPatient, setSearchedPatient] = useState({});
   const [searchedPatientHS, setSearchedPatientHS] = useState("");
+  const [addHealthHistory, setAddHealthHistory] = useState(false);
+  const [patientUserId, setPatientUserId] = useState("");
+  const [values, setValues] = useState({
+    // patientId: JSON.stringify(location.state.email).substring(
+    //   1,
+    //   JSON.stringify(location.state.email).length - 1
+    // ),
+    patientId: "",
+    healthHistory: "",
+    description: "",
+    yearManifested: "",
+    medication: "",
+    diagnosis: "",
+    procedures: "",
+    physicianInCharge: location.state.physiciansFullname,
+  });
+
+  const setPatientEmail = async (email) => {
+    setValues({ ...values, ["patientId"]: email });
+  };
 
   const readAllPatients = async () => {
     const { data } = await readAllPatient();
@@ -364,6 +385,7 @@ const MainPage = (props) => {
     const storeAllPatients = async () => {
       const dataFromServer = await readAllPatients();
       setAllPatients(dataFromServer.patients);
+      console.log(allPatients);
     };
 
     const storeAllHealthHistory = async () => {
@@ -393,6 +415,30 @@ const MainPage = (props) => {
     setPatient(event.target.value);
     fetchData(event.target.value);
     setShowPatientResult(true);
+  };
+  console.log(allPatients);
+
+  const handleChange = (prop) => (event) => {
+    event.preventDefault();
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const createNewHealthHistory = () => (event) => {
+    event.preventDefault();
+    const callCreateHealthHistory = async () => {
+      try {
+        console.log(values);
+        const { data } = await createHealthHistory(values);
+        if (data.success === true) {
+          alert(data.msg);
+        } else {
+          alert(data.msg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    callCreateHealthHistory();
   };
 
   const drawer = (
@@ -635,7 +681,12 @@ const MainPage = (props) => {
                       date={value.registerDate}
                       user="Physician"
                       nameOfPhysician={location.state.physiciansFullname}
+                      physicianInCharge={value.physicianInCharge}
                       email={value.email}
+                      setAddHealthHistory={setAddHealthHistory}
+                      addHealthHistory={addHealthHistory}
+                      setPatientEmail={setPatientEmail}
+                      setPatientUserId={setPatientUserId}
                     />
                   </Grid>
                 ))}
@@ -742,26 +793,161 @@ const MainPage = (props) => {
           >
             <Stack direction="row" spacing={2} justifyContent="space-between">
               <StyledHeader>No patient's consent</StyledHeader>
-
-              <AiOutlineClose
-                style={{
-                  fontSize: 25,
-                  marginRight: "10px",
-                  color: "#707070",
-                  marginTop: -2,
-                }}
-                onClick={() => {
-                  setOpenSearch(!openSearch);
-                  //setAuthorized(false);
-                }}
-                cursor="pointer"
-              />
+              <IconButton>
+                <AiOutlineClose
+                  onClick={() => {
+                    setOpenSearch(!openSearch);
+                    //setAuthorized(false);
+                  }}
+                  cursor="pointer"
+                  color="#cc4b4b"
+                />
+              </IconButton>
             </Stack>
             <br />
             <Typography sx={{ mb: 1.5 }}>
               This patient is assigned to another physician or you don't have
               consent to view this patient.
             </Typography>
+          </Container>
+        </Modal>
+      )}
+
+      {addHealthHistory && (
+        <Modal
+          open={addHealthHistory}
+          onClose={() => setAddHealthHistory(!addHealthHistory)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Container
+            sx={{
+              borderRadius: "16px",
+              boxShadow: 3,
+              // width: { xs: 320, md: 420 },
+              // height: { xs: 300, md: 300 },
+              paddingTop: 5,
+              paddingBotom: 5,
+              backgroundColor: "#fff",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: { xs: "15rem", lg: "25rem" },
+              p: 4,
+            }}
+          >
+            <form onSubmit={createNewHealthHistory()}>
+              <FormControl
+                style={{
+                  alignItems: "center",
+                  justifyItems: "center",
+                }}
+              >
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Patient Id"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  value={patientUserId}
+                  required
+                  disabled
+                />
+                <br />
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Health history"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  onChange={handleChange("healthHistory")}
+                  value={values.healthHistory}
+                  required
+                />
+                <br />
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Description"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  onChange={handleChange("description")}
+                  value={values.description}
+                />
+                <br />
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Date or year manifested"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  onChange={handleChange("yearManifested")}
+                  value={values.yearManifested}
+                  required
+                />
+                <br />
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Medication"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  onChange={handleChange("medication")}
+                  value={values.medication}
+                  required
+                />
+                <br />
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Diagnosis"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  onChange={handleChange("diagnosis")}
+                  value={values.diagnosis}
+                  required
+                />
+                <br />
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Procedures"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  onChange={handleChange("procedures")}
+                  value={values.procedures}
+                  required
+                />
+                <br />
+
+                <TextField
+                  id="demo-helper-text-misaligned"
+                  label="Physician in charge"
+                  sx={{
+                    width: { xs: 200, md: 350 },
+                    fontStyle: "italic",
+                  }}
+                  value={location.state.physiciansFullname}
+                  required
+                />
+                <br />
+                <StyledButton variant="contained" type="submit">
+                  Add
+                </StyledButton>
+              </FormControl>
+            </form>
           </Container>
         </Modal>
       )}

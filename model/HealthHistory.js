@@ -19,6 +19,18 @@ const HealthHistorySchema = new Schema({
     type: String,
     required: true,
   },
+  medication: {
+    type: String,
+    required: true,
+  },
+  diagnosis: {
+    type: String,
+    required: true,
+  },
+  procedures: {
+    type: String,
+    required: true,
+  },
   physicianInCharge: {
     type: String,
     required: true,

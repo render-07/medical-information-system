@@ -17,6 +17,9 @@ router.post("/", async (req, res) => {
     healthHistory,
     description,
     yearManifested,
+    medication,
+    diagnosis,
+    procedures,
     physicianInCharge,
   } = req.body;
 
@@ -25,6 +28,9 @@ router.post("/", async (req, res) => {
     healthHistory,
     description,
     yearManifested,
+    medication,
+    diagnosis,
+    procedures,
     physicianInCharge,
   });
 

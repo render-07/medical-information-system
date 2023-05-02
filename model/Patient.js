@@ -36,6 +36,10 @@ const PatientSchema = new Schema({
     type: String,
     required: true,
   },
+  physicianInCharge: {
+    type: String,
+    required: false,
+  },
   password: {
     type: String,
     required: true,
